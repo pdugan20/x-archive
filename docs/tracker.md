@@ -34,16 +34,17 @@
 
 ## Phase 2: Database Design
 
-- [ ] Create Supabase project
-- [ ] Migration 001: tweets, tweet_entities, tweet_media, settings, deletion_log tables
-- [ ] Migration 002: tweet-media storage bucket
-- [ ] Migration 003: full-text search (tsvector + GIN index)
-- [ ] Generate types (npm run db:gen-types)
-- [ ] Create lib/db/tweets.ts (CRUD operations)
-- [ ] Create lib/db/media.ts
-- [ ] Create lib/db/settings.ts
-- [ ] Create lib/db/deletion-log.ts
-- [ ] Create lib/db/search.ts (full-text search)
+- [x] Create Supabase project (x-archive-app, us-west-1)
+- [x] Migration 001: tweets, tweet_entities, tweet_media, settings, deletion_log tables
+- [x] Migration 002: tweet-media storage bucket
+- [x] Migration 003: full-text search (tsvector + GIN index)
+- [x] Generate types (types/database.ts)
+- [x] Create lib/db/tweets.ts (CRUD operations)
+- [x] Create lib/db/media.ts
+- [x] Create lib/db/settings.ts
+- [x] Create lib/db/deletion-log.ts
+- [x] Create lib/db/search.ts (full-text search)
+- [x] Create lib/db/entities.ts (URLs, hashtags, mentions)
 - [ ] Write tests for DB query functions
 
 ## Phase 3: Archive Import (Twitter Data Export)

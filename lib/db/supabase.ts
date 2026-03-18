@@ -1,3 +1,4 @@
+import type { Database } from '@/types/database';
 import { createClient } from '@supabase/supabase-js';
 
 // Admin client for server-side operations (full access)
@@ -14,7 +15,7 @@ export function getSupabaseAdmin() {
     throw new Error('Missing environment variable: SUPABASE_SERVICE_ROLE_KEY');
   }
 
-  return createClient(supabaseUrl, supabaseServiceKey, {
+  return createClient<Database>(supabaseUrl, supabaseServiceKey, {
     auth: {
       autoRefreshToken: false,
       persistSession: false,
