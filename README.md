@@ -1,62 +1,51 @@
 # x-archive
 
-[![CI](https://github.com/pdugan20/x-archive/actions/workflows/ci.yml/badge.svg)](https://github.com/pdugan20/x-archive/actions/workflows/ci.yml)
-[![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)](https://www.typescriptlang.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![CI](https://github.com/pdugan20/x-archive/workflows/CI/badge.svg)](https://github.com/pdugan20/x-archive/actions)
+[![Node.js](https://img.shields.io/node/v/next?logo=node.js)](https://nodejs.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?logo=opensourceinitiative&logoColor=white)](https://opensource.org/licenses/MIT)
 
-Archive and auto-delete old tweets from X/Twitter. Syncs your tweets via the X API, stores them with
-full metadata and media in a browseable web UI, and auto-deletes tweets older than a configurable
-retention period.
+Archive and auto-delete old tweets from X/Twitter. Live at
+[xarchive.co](https://xarchive.co).
 
-Live at [xarchive.co](https://xarchive.co)
+## How It Works
 
-## Features
-
-- **Tweet archive** with infinite scroll, type filtering (posts, replies, retweets, quotes), and full-text search
-- **Auto-deletion** with per-type retention periods, viral tweet protection, and keyword allowlists
-- **Media gallery** with images from archived tweets
-- **Link extraction** with deduplication and domain grouping
-- **Stats dashboard** with tweet counts, type breakdown, and top liked posts
-- **Supabase Auth** with cookie-based sessions and middleware-protected routes
-- **Cron jobs** for automated sync (every 6hrs) and deletion (daily)
+1. Syncs your tweets via the X API (every 6 hours), including full retweet text and media
+2. Stores everything in a browseable archive with search, media gallery, and stats
+3. Auto-deletes tweets older than a configurable retention period (per type: posts, replies, retweets, quotes)
+4. Protects viral tweets and keyword-matched tweets from deletion
 
 ## Tech Stack
 
 - **Framework**: Next.js 16 (App Router)
 - **Database**: Supabase (PostgreSQL + Storage)
 - **UI**: shadcn/ui + Tailwind CSS 4
-- **Auth**: Supabase Auth with @supabase/ssr
+- **Auth**: Supabase Auth with `@supabase/ssr`
 - **API**: X API v2 with OAuth 1.0a
 - **Deployment**: Vercel
 - **Monitoring**: Sentry
 - **Testing**: Vitest
 
-## Quick Start
+## Getting Started
 
 ```bash
 git clone https://github.com/pdugan20/x-archive.git
 cd x-archive
 npm install
-cp .env.example .env.local
-# Fill in your Supabase and X API credentials
-npm run dev
+cp .env.example .env.local   # Fill in your keys
+npm run dev                   # http://localhost:3000
 ```
+
+See [.env.example](.env.example) for required environment variables.
 
 ## Scripts
 
 ```bash
-npm run dev              # Dev server
+npm run dev              # Development server
 npm run build            # Production build
-npm run test             # Run tests
-npm run type-check       # TypeScript strict checking
+npm test                 # Run unit tests
+npm run type-check       # TypeScript checking
 npm run lint             # ESLint
-npm run format:check     # Prettier check
-npm run lint:md          # Markdownlint
+npm run format           # Prettier
 npm run import           # Import Twitter data export
 npm run db:gen-types     # Regenerate Supabase types
 ```
-
-## License
-
-[MIT](LICENSE)
