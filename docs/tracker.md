@@ -26,11 +26,11 @@
 - [x] Write CLAUDE.md
 - [x] Write README.md (badges, quick start, tech stack)
 - [x] Create docs/tracker.md
-- [ ] Install all dependencies at latest versions
-- [ ] Verify npm run lint passes
-- [ ] Verify npm run format:check passes
-- [ ] Verify npm run type-check passes
-- [ ] Verify npm run build passes
+- [x] Install all dependencies at latest versions
+- [x] Verify npm run lint passes
+- [x] Verify npm run format:check passes
+- [x] Verify npm run type-check passes
+- [x] Verify npm run build passes
 
 ## Phase 2: Database Design
 
@@ -104,11 +104,11 @@
 - [x] Create CI workflow (.github/workflows/ci.yml)
 - [x] Create Dependabot config (.github/dependabot.yml)
 - [x] Create Dependabot auto-merge workflow
-- [ ] Create GitHub Ruleset (require Test + Lint and Format + Build)
-- [ ] Enable workflow permissions (can_approve_pull_request_reviews)
-- [ ] Disable unused Wiki/Projects in repo settings
-- [ ] Set repo description, topics
+- [x] Create GitHub Ruleset (require Test + Lint and Format + Build)
+- [x] Enable workflow permissions (can_approve_pull_request_reviews)
+- [x] Disable unused Wiki/Projects in repo settings
+- [x] Set repo description, topics
 - [ ] Link Vercel project
 - [ ] Set Vercel environment variables
-- [ ] Push initial commit and verify CI passes
+- [x] Push initial commit and verify CI passes
 - [ ] Create Slack channel + GitHub notifications (optional)
