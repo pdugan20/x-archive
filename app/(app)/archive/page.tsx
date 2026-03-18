@@ -1,10 +1,12 @@
-import { TweetCard } from '@/components/tweet-card';
+import { TweetList } from '@/components/tweet-list';
 import { Badge } from '@/components/ui/badge';
 import { getSupabaseAdmin } from '@/lib/db/supabase';
 import type { TweetType } from '@/lib/db/tweets';
 import type { Tables } from '@/types/database';
 
 export const dynamic = 'force-dynamic';
+
+const PAGE_SIZE = 30;
 
 const TWEET_TYPES: { label: string; value: TweetType | 'all' }[] = [
   { label: 'All', value: 'all' },
@@ -17,12 +19,10 @@ const TWEET_TYPES: { label: string; value: TweetType | 'all' }[] = [
 export default async function ArchivePage({
   searchParams,
 }: {
-  searchParams: Promise<{ type?: string; page?: string }>;
+  searchParams: Promise<{ type?: string }>;
 }) {
   const params = await searchParams;
   const activeType = (params.type ?? 'all') as TweetType | 'all';
-  const page = parseInt(params.page ?? '0', 10);
-  const pageSize = 50;
 
   const supabase = getSupabaseAdmin();
   let query = supabase
@@ -30,37 +30,39 @@ export default async function ArchivePage({
     .select('*')
     .eq('is_deleted', false)
     .order('created_at', { ascending: false })
-    .range(page * pageSize, (page + 1) * pageSize - 1);
+    .limit(PAGE_SIZE);
 
   if (activeType !== 'all') {
     query = query.eq('tweet_type', activeType);
   }
 
-  const { data: tweets, error } = await query;
+  const { data: tweets } = await query;
 
-  // Fetch media for all tweets on this page
-  const mediaByTweet = new Map<string, Tables<'tweet_media'>[]>();
+  // Fetch media
+  const mediaMap: Record<string, Tables<'tweet_media'>[]> = {};
   if (tweets && tweets.length > 0) {
     const tweetIds = tweets.map((t) => t.id);
-    const { data: allMedia } = await supabase
+    const mediaResult = await supabase
       .from('tweet_media')
       .select('*')
       .in('tweet_id', tweetIds);
 
-    if (allMedia) {
-      for (const m of allMedia) {
-        const existing = mediaByTweet.get(m.tweet_id) ?? [];
-        existing.push(m);
-        mediaByTweet.set(m.tweet_id, existing);
-      }
+    const mediaList = mediaResult.data ?? ([] as Tables<'tweet_media'>[]);
+    for (const m of mediaList) {
+      const tid = m.tweet_id;
+      mediaMap[tid] = [...(mediaMap[tid] ?? []), m];
     }
   }
 
-  // Get total count
   const { count: totalCount } = await supabase
     .from('tweets')
     .select('*', { count: 'exact', head: true })
     .eq('is_deleted', false);
+
+  const nextCursor =
+    tweets && tweets.length === PAGE_SIZE
+      ? tweets[tweets.length - 1].created_at
+      : null;
 
   return (
     <div>
@@ -87,46 +89,13 @@ export default async function ArchivePage({
         ))}
       </div>
 
-      {error && (
-        <p className="text-sm text-destructive">
-          Failed to load tweets: {error.message}
-        </p>
-      )}
-
-      <div className="space-y-3">
-        {tweets?.map((tweet) => (
-          <TweetCard
-            key={tweet.id}
-            tweet={tweet}
-            media={mediaByTweet.get(tweet.id)}
-          />
-        ))}
-      </div>
-
-      {(!tweets || tweets.length === 0) && !error && (
-        <p className="py-12 text-center text-sm text-muted-foreground">
-          No tweets found. Import your Twitter archive to get started.
-        </p>
-      )}
-
-      {tweets && tweets.length === pageSize && (
-        <div className="mt-6 flex justify-center gap-4">
-          {page > 0 && (
-            <a
-              href={`/archive?type=${activeType}&page=${page - 1}`}
-              className="text-sm text-muted-foreground hover:text-foreground"
-            >
-              Previous
-            </a>
-          )}
-          <a
-            href={`/archive?type=${activeType}&page=${page + 1}`}
-            className="text-sm text-muted-foreground hover:text-foreground"
-          >
-            Next
-          </a>
-        </div>
-      )}
+      <TweetList
+        key={activeType}
+        initialTweets={tweets ?? []}
+        initialMedia={mediaMap}
+        initialCursor={nextCursor}
+        type={activeType}
+      />
     </div>
   );
 }

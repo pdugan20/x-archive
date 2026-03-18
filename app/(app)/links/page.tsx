@@ -1,9 +1,7 @@
-import { Card, CardContent } from '@/components/ui/card';
 import { getSupabaseAdmin } from '@/lib/db/supabase';
 
 export const dynamic = 'force-dynamic';
 
-// Domains to exclude (twitter/x media links, pic.twitter.com, etc.)
 const EXCLUDED_DOMAINS = [
   'twitter.com',
   'x.com',
@@ -23,24 +21,21 @@ function getDomain(url: string): string | null {
 export default async function LinksPage() {
   const supabase = getSupabaseAdmin();
 
-  // Fetch all URL entities at once
   const { data: urls, error } = await supabase
     .from('tweet_entities')
     .select('value, expanded_url, display_url, title')
     .eq('entity_type', 'url')
     .not('expanded_url', 'is', null);
 
-  // Group by expanded_url, filter out twitter/x domains
   const grouped = new Map<
     string,
-    { url: string; displayUrl: string; title: string | null; count: number }
+    { url: string; domain: string; title: string | null; count: number }
   >();
 
   for (const entity of urls ?? []) {
     const expandedUrl = entity.expanded_url ?? entity.value;
     const domain = getDomain(expandedUrl);
 
-    // Skip twitter/x internal links and unresolved t.co shortlinks
     if (!domain || EXCLUDED_DOMAINS.some((d) => domain.endsWith(d))) {
       continue;
     }
@@ -48,14 +43,13 @@ export default async function LinksPage() {
     const existing = grouped.get(expandedUrl);
     if (existing) {
       existing.count++;
-      // Prefer entries that have a title
       if (!existing.title && entity.title) {
         existing.title = entity.title;
       }
     } else {
       grouped.set(expandedUrl, {
         url: expandedUrl,
-        displayUrl: entity.display_url ?? expandedUrl,
+        domain,
         title: entity.title,
         count: 1,
       });
@@ -79,37 +73,53 @@ export default async function LinksPage() {
         </p>
       )}
 
-      <div className="space-y-2">
-        {sortedLinks.map((link) => (
-          <Card key={link.url}>
-            <CardContent className="p-3">
-              <div className="flex items-start justify-between gap-2">
-                <div className="min-w-0 flex-1">
-                  {link.title && (
-                    <p className="truncate text-sm font-medium">{link.title}</p>
-                  )}
-                  <a
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block truncate text-xs text-muted-foreground hover:text-foreground"
-                  >
-                    {link.displayUrl}
-                  </a>
-                </div>
-                {link.count > 1 && (
-                  <span className="shrink-0 text-xs text-muted-foreground">
-                    {link.count}x
-                  </span>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {sortedLinks.length === 0 && !error && (
-        <p className="py-12 text-center text-sm text-muted-foreground">
+      {sortedLinks.length > 0 ? (
+        <div className="max-w-2xl">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b text-left text-xs text-muted-foreground">
+                <th className="pb-2 font-medium">Link</th>
+                <th className="pb-2 text-right font-medium">Shared</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sortedLinks.map((link) => (
+                <tr key={link.url} className="border-b last:border-0">
+                  <td className="py-2 pr-4">
+                    <a
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:underline"
+                    >
+                      {link.title ? (
+                        <>
+                          <span className="line-clamp-1">{link.title}</span>
+                          <span className="text-xs text-muted-foreground">
+                            {link.domain}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="text-muted-foreground">
+                          {link.domain}
+                          {link.url
+                            .replace(/^https?:\/\/(www\.)?/, '')
+                            .replace(link.domain, '')
+                            .substring(0, 40)}
+                        </span>
+                      )}
+                    </a>
+                  </td>
+                  <td className="py-2 text-right text-muted-foreground">
+                    {link.count > 1 ? `${link.count}x` : ''}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p className="py-12 text-sm text-muted-foreground">
           No links found in your archive.
         </p>
       )}
