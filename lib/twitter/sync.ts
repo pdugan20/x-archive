@@ -206,7 +206,8 @@ export async function syncRecentTweets(): Promise<{
       }
     }
 
-    const allMedia = [...result.media, ...retweetOriginalMedia];
+    // Original tweet media first so correct URLs take priority over stale timeline URLs
+    const allMedia = [...retweetOriginalMedia, ...result.media];
     const mediaRows = result.tweets.flatMap((t) => convertMedia(t, allMedia));
     if (mediaRows.length > 0) {
       const { upsertMedia: upsertMediaFn } = await import('@/lib/db/media');
