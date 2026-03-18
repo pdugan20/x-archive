@@ -1,0 +1,66 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-fg: var(--accent-fg);
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --surface: #fafafa;
+  --surface-raised: #fafafc;
+  --text-primary: #0d1117;
+  --text-secondary: #4a4a5a;
+  --text-muted: #6b6b7e;
+  --accent: #171717;
+  --accent-hover: #333333;
+  --accent-fg: #ffffff;
+  --border: #d8dae0;
+  --border-subtle: #e8eaed;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --surface: #111111;
+    --surface-raised: #1a1a1a;
+    --text-primary: #e6edf3;
+    --text-secondary: #d1d5db;
+    --text-muted: #8b949e;
+    --accent: #f0f0f0;
+    --accent-hover: #d8d8d8;
+    --accent-fg: #0a0a0a;
+    --border: #30363d;
+    --border-subtle: #21262d;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+}

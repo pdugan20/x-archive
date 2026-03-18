@@ -1,0 +1,27 @@
+# Dependencies
+node_modules
+
+# Build output
+.next
+out
+build
+dist
+
+# Cache
+.turbo
+.cache
+
+# Environment
+.env
+.env*.local
+
+# Misc
+.DS_Store
+*.pem
+coverage
+
+# Supabase
+.supabase
+
+# Logs
+*.log
