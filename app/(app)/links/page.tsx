@@ -1,33 +1,61 @@
 import { Card, CardContent } from '@/components/ui/card';
-import { getUrlEntities } from '@/lib/db/entities';
+import { getSupabaseAdmin } from '@/lib/db/supabase';
 
 export const dynamic = 'force-dynamic';
 
-export default async function LinksPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ page?: string }>;
-}) {
-  const params = await searchParams;
-  const page = parseInt(params.page ?? '0', 10);
+// Domains to exclude (twitter/x media links, pic.twitter.com, etc.)
+const EXCLUDED_DOMAINS = [
+  'twitter.com',
+  'x.com',
+  'pic.twitter.com',
+  'pic.x.com',
+  't.co',
+];
 
-  const { data: urls, error } = await getUrlEntities(page, 50);
+function getDomain(url: string): string | null {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return null;
+  }
+}
 
-  // Group by expanded_url for deduplication
+export default async function LinksPage() {
+  const supabase = getSupabaseAdmin();
+
+  // Fetch all URL entities at once
+  const { data: urls, error } = await supabase
+    .from('tweet_entities')
+    .select('value, expanded_url, display_url, title')
+    .eq('entity_type', 'url')
+    .not('expanded_url', 'is', null);
+
+  // Group by expanded_url, filter out twitter/x domains
   const grouped = new Map<
     string,
     { url: string; displayUrl: string; title: string | null; count: number }
   >();
 
   for (const entity of urls ?? []) {
-    const key = entity.expanded_url ?? entity.value;
-    const existing = grouped.get(key);
+    const expandedUrl = entity.expanded_url ?? entity.value;
+    const domain = getDomain(expandedUrl);
+
+    // Skip twitter/x internal links
+    if (domain && EXCLUDED_DOMAINS.some((d) => domain.endsWith(d))) {
+      continue;
+    }
+
+    const existing = grouped.get(expandedUrl);
     if (existing) {
       existing.count++;
+      // Prefer entries that have a title
+      if (!existing.title && entity.title) {
+        existing.title = entity.title;
+      }
     } else {
-      grouped.set(key, {
-        url: entity.expanded_url ?? entity.value,
-        displayUrl: entity.display_url ?? key,
+      grouped.set(expandedUrl, {
+        url: expandedUrl,
+        displayUrl: entity.display_url ?? expandedUrl,
         title: entity.title,
         count: 1,
       });
@@ -41,7 +69,7 @@ export default async function LinksPage({
       <div className="mb-6">
         <h1 className="text-2xl font-semibold tracking-tight">Links</h1>
         <p className="text-sm text-muted-foreground">
-          URLs shared in your tweets
+          {sortedLinks.length} unique URLs shared in your tweets
         </p>
       </div>
 
@@ -64,7 +92,7 @@ export default async function LinksPage({
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="truncate text-xs text-muted-foreground hover:text-foreground"
+                    className="block truncate text-xs text-muted-foreground hover:text-foreground"
                   >
                     {link.displayUrl}
                   </a>
