@@ -2,6 +2,7 @@ import { TweetCard } from '@/components/tweet-card';
 import { Badge } from '@/components/ui/badge';
 import { getSupabaseAdmin } from '@/lib/db/supabase';
 import type { TweetType } from '@/lib/db/tweets';
+import type { Tables } from '@/types/database';
 
 export const dynamic = 'force-dynamic';
 
@@ -37,7 +38,25 @@ export default async function ArchivePage({
 
   const { data: tweets, error } = await query;
 
-  // Get counts per type
+  // Fetch media for all tweets on this page
+  const mediaByTweet = new Map<string, Tables<'tweet_media'>[]>();
+  if (tweets && tweets.length > 0) {
+    const tweetIds = tweets.map((t) => t.id);
+    const { data: allMedia } = await supabase
+      .from('tweet_media')
+      .select('*')
+      .in('tweet_id', tweetIds);
+
+    if (allMedia) {
+      for (const m of allMedia) {
+        const existing = mediaByTweet.get(m.tweet_id) ?? [];
+        existing.push(m);
+        mediaByTweet.set(m.tweet_id, existing);
+      }
+    }
+  }
+
+  // Get total count
   const { count: totalCount } = await supabase
     .from('tweets')
     .select('*', { count: 'exact', head: true })
@@ -76,7 +95,11 @@ export default async function ArchivePage({
 
       <div className="space-y-3">
         {tweets?.map((tweet) => (
-          <TweetCard key={tweet.id} tweet={tweet} />
+          <TweetCard
+            key={tweet.id}
+            tweet={tweet}
+            media={mediaByTweet.get(tweet.id)}
+          />
         ))}
       </div>
 

@@ -40,8 +40,8 @@ export default async function LinksPage() {
     const expandedUrl = entity.expanded_url ?? entity.value;
     const domain = getDomain(expandedUrl);
 
-    // Skip twitter/x internal links
-    if (domain && EXCLUDED_DOMAINS.some((d) => domain.endsWith(d))) {
+    // Skip twitter/x internal links and unresolved t.co shortlinks
+    if (!domain || EXCLUDED_DOMAINS.some((d) => domain.endsWith(d))) {
       continue;
     }
 

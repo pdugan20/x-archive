@@ -4,6 +4,7 @@ import { upsertTweets } from '@/lib/db/tweets';
 import type { TablesInsert } from '@/types/database';
 import {
   getMe,
+  getTweetById,
   getUserTweets,
   type XMediaObject,
   type XTweet,
@@ -194,10 +195,19 @@ export async function syncRecentTweets(): Promise<{
       }
     }
 
-    // Convert and upsert media
-    const mediaRows = result.tweets.flatMap((t) =>
-      convertMedia(t, result.media)
-    );
+    // For retweets, fetch the original tweet to get correct media URLs
+    // (the timeline endpoint returns stale/wrong media URLs for RTs)
+    const retweetOriginalMedia: XMediaObject[] = [];
+    for (const t of result.tweets) {
+      const rtRef = t.referenced_tweets?.find((r) => r.type === 'retweeted');
+      if (rtRef && t.attachments?.media_keys?.length) {
+        const original = await getTweetById(rtRef.id);
+        retweetOriginalMedia.push(...original.media);
+      }
+    }
+
+    const allMedia = [...result.media, ...retweetOriginalMedia];
+    const mediaRows = result.tweets.flatMap((t) => convertMedia(t, allMedia));
     if (mediaRows.length > 0) {
       const { upsertMedia: upsertMediaFn } = await import('@/lib/db/media');
       const { error: mediaError } = await upsertMediaFn(mediaRows);

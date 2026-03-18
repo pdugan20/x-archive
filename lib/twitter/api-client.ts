@@ -179,6 +179,28 @@ export async function getUserTweets(
 }
 
 /**
+ * Fetch a single tweet by ID with media expansions.
+ * Used to get correct media URLs for retweeted tweets.
+ */
+export async function getTweetById(tweetId: string): Promise<{
+  tweet: XTweet | null;
+  media: XMediaObject[];
+}> {
+  const response = await xApiFetch<XTweet>('GET', `/tweets/${tweetId}`, {
+    'tweet.fields':
+      'created_at,public_metrics,conversation_id,in_reply_to_user_id,entities,source,lang,referenced_tweets,attachments',
+    'media.fields':
+      'url,preview_image_url,width,height,alt_text,duration_ms,type',
+    expansions: 'attachments.media_keys',
+  });
+
+  return {
+    tweet: response.data ?? null,
+    media: response.includes?.media ?? [],
+  };
+}
+
+/**
  * Delete a tweet by ID.
  */
 export async function deleteTweet(

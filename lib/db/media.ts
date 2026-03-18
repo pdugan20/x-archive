@@ -26,7 +26,6 @@ export async function getAllPhotos(page = 0, pageSize = 50) {
     .from('tweet_media')
     .select('*')
     .eq('media_type', 'photo')
-    .not('storage_path', 'is', null)
     .order('tweet_id', { ascending: false })
     .range(page * pageSize, (page + 1) * pageSize - 1);
 }
