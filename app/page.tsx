@@ -1,10 +1,8 @@
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { redirect } = require('next/navigation') as {
+  redirect: (url: string) => never;
+};
+
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-8">
-      <h1 className="text-3xl font-semibold tracking-tight">x-archive</h1>
-      <p className="mt-2 text-text-secondary">
-        Archive and auto-delete old tweets.
-      </p>
-    </main>
-  );
+  redirect('/archive');
 }
