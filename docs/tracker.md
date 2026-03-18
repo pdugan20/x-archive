@@ -99,14 +99,16 @@
 
 ## Phase 5: X API Integration
 
-- [ ] Create X Developer App (pay-per-use tier)
-- [ ] Complete OAuth 2.0 flow for user tokens
-- [ ] Create lib/twitter/api-client.ts (read, delete, unretweet)
-- [ ] Create lib/twitter/oauth.ts (token refresh)
-- [ ] Create lib/twitter/rate-limiter.ts
-- [ ] Create app/api/cron/sync-recent/route.ts (fetch new tweets)
+- [x] Create X Developer App (pat-x-archive, Read and Write permissions)
+- [x] Configure OAuth 1.0a credentials (consumer key + access token for @doog)
+- [x] Create lib/twitter/oauth.ts (OAuth 1.0a HMAC-SHA1 request signing)
+- [x] Create lib/twitter/rate-limiter.ts (track x-rate-limit headers, auto-wait)
+- [x] Create lib/twitter/api-client.ts (getMe, getUserTweets, deleteTweet, undoRetweet)
+- [x] Create lib/twitter/sync.ts (sync recent tweets with entity + media conversion)
+- [x] Create app/api/cron/sync-recent/route.ts (cron endpoint with CRON_SECRET auth)
+- [x] Smoke test: getMe returns @doog, getUserTweets returns tweets with media
 - [ ] Add sync cron entry to vercel.json
-- [ ] Test API client with real credentials
+- [ ] Add X API env vars to Vercel production
 
 ## Phase 6: Auto-Deletion System
 
