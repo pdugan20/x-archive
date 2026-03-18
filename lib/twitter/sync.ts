@@ -177,32 +177,51 @@ export async function syncRecentTweets(): Promise<{
 
     if (result.tweets.length === 0) break;
 
+    // For retweets, fetch the original tweet to get:
+    // 1. Full text (API truncates RT text at ~140 chars)
+    // 2. Correct media URLs (timeline endpoint returns stale ones)
+    // 3. Entities from the original tweet
+    const retweetOriginalMedia: XMediaObject[] = [];
+    const enrichedTweets: XTweet[] = [];
+
+    for (const t of result.tweets) {
+      const rtRef = t.referenced_tweets?.find((r) => r.type === 'retweeted');
+      if (rtRef) {
+        try {
+          const original = await getTweetById(rtRef.id);
+          if (original.tweet) {
+            // Extract original author from the RT prefix in our truncated text
+            const authorMatch = /^RT @(\w+):/.exec(t.text);
+            const author = authorMatch?.[1] ?? 'unknown';
+            enrichedTweets.push({
+              ...t,
+              text: `RT @${author}: ${original.tweet.text}`,
+            });
+            retweetOriginalMedia.push(...original.media);
+            continue;
+          }
+        } catch {
+          // Original tweet may be deleted or protected — use what we have
+        }
+      }
+      enrichedTweets.push(t);
+    }
+
     // Convert and upsert tweets
-    const tweetRows = result.tweets.map(convertTweet);
+    const tweetRows = enrichedTweets.map(convertTweet);
     const { error: tweetsError } = await upsertTweets(tweetRows);
     if (tweetsError) {
       console.error(`[SYNC] Failed to upsert tweets: ${tweetsError.message}`);
     }
 
-    // Convert and insert entities
-    const entityRows = result.tweets.flatMap(convertEntities);
+    // Convert and insert entities (use enriched tweets for better data)
+    const entityRows = enrichedTweets.flatMap(convertEntities);
     if (entityRows.length > 0) {
       const { error: entitiesError } = await upsertEntities(entityRows);
       if (entitiesError) {
         console.error(
           `[SYNC] Failed to insert entities: ${entitiesError.message}`
         );
-      }
-    }
-
-    // For retweets, fetch the original tweet to get correct media URLs
-    // (the timeline endpoint returns stale/wrong media URLs for RTs)
-    const retweetOriginalMedia: XMediaObject[] = [];
-    for (const t of result.tweets) {
-      const rtRef = t.referenced_tweets?.find((r) => r.type === 'retweeted');
-      if (rtRef && t.attachments?.media_keys?.length) {
-        const original = await getTweetById(rtRef.id);
-        retweetOriginalMedia.push(...original.media);
       }
     }
 
