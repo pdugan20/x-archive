@@ -70,16 +70,17 @@
 
 ## Phase 3: Archive Import (Twitter Data Export)
 
-- [ ] Create lib/import/parser.ts (parse tweets.js from zip)
-- [ ] Create lib/import/entity-extractor.ts (URLs, hashtags, mentions)
-- [ ] Create lib/import/media-downloader.ts (images to Supabase Storage)
-- [ ] Create lib/import/thread-reconstructor.ts (self-reply chains)
-- [ ] Create scripts/cli/import-archive.ts (CLI entry point)
+- [x] Create lib/import/types.ts (Twitter export format types)
+- [x] Create lib/import/parser.ts (parse tweets.js from zip)
+- [x] Create lib/import/entity-extractor.ts (URLs, hashtags, mentions)
+- [x] Create lib/import/media-downloader.ts (images to Supabase Storage)
+- [x] Create lib/import/thread-reconstructor.ts (self-reply chains)
+- [x] Create scripts/cli/import-archive.ts (CLI entry point)
 - [ ] Create app/import/page.tsx (web UI for import)
 - [ ] Create app/api/import/route.ts (upload handler)
-- [ ] Write tests for parser
-- [ ] Write tests for entity extractor
-- [ ] Write tests for thread reconstructor
+- [x] Write tests for parser (7 tests)
+- [x] Write tests for entity extractor (6 tests)
+- [x] Write tests for thread reconstructor (6 tests)
 - [ ] Test with real Twitter data export
 
 ## Phase 4: Browse UI
