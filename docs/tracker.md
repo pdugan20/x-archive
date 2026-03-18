@@ -66,7 +66,7 @@
 - [x] Set up xarchive.co domain on Vercel (deployed, SSL cert provisioning)
 - [x] Set Vercel production env vars (all 5 configured)
 - [ ] Configure Supabase Auth site URL to <https://xarchive.co> (manual step)
-- [ ] Verify xarchive.co SSL cert is live
+- [x] Verify xarchive.co SSL cert is live (confirmed, 307 redirect working)
 
 ## Phase 3: Archive Import (Twitter Data Export)
 
@@ -85,17 +85,18 @@
 
 ## Phase 4: Browse UI
 
-- [ ] Create sidebar/layout component
-- [ ] Create TweetCard component
-- [ ] Create app/archive/page.tsx (timeline with type tabs, date filter, pagination)
-- [ ] Create app/search/page.tsx (full-text search)
-- [ ] Create app/media/page.tsx (image grid with lightbox)
-- [ ] Create app/links/page.tsx (extracted URLs, grouped by domain)
-- [ ] Create app/thread/[id]/page.tsx (thread view)
-- [ ] Create app/tweet/[id]/page.tsx (single tweet detail)
-- [ ] Create app/stats/page.tsx (dashboard: tweets/month, top domains, etc.)
-- [ ] Create app/settings/page.tsx (retention, protection rules)
-- [ ] Responsive design (mobile sidebar collapse)
+- [x] Create sidebar/layout component (shadcn Sidebar with nav icons)
+- [x] Create TweetCard component (type badge, metrics, reply/thread indicators)
+- [x] Create app/archive/page.tsx (timeline with type tabs and pagination)
+- [x] Create app/search/page.tsx (full-text search via Postgres FTS)
+- [x] Create app/media/page.tsx (image grid with lazy loading)
+- [x] Create app/links/page.tsx (extracted URLs, deduplicated, sorted by frequency)
+- [x] Create app/thread/[id]/page.tsx (threaded conversation view)
+- [x] Create app/tweet/[id]/page.tsx (detail with media, entities, thread link)
+- [x] Create app/stats/page.tsx (counts, type breakdown, top liked posts)
+- [x] Create app/settings/page.tsx (per-type retention, viral threshold, keywords, toggles)
+- [x] Create app/import/page.tsx (CLI instructions)
+- [x] Responsive design (shadcn sidebar collapses on mobile)
 
 ## Phase 5: X API Integration
 
