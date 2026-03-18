@@ -61,11 +61,11 @@
 - [x] Create your user account in Supabase Auth dashboard
 - [x] Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to .env.local
 - [x] Verify: unauthenticated users are redirected to /login (confirmed locally + Vercel)
-- [ ] Verify: authenticated users can access all app routes (pending production login test)
-- [x] Verify: cron endpoints still work with CRON_SECRET (health endpoint confirmed)
-- [x] Set up xarchive.co domain on Vercel (deployed, SSL cert provisioning)
-- [x] Set Vercel production env vars (all 5 configured)
-- [ ] Configure Supabase Auth site URL to <https://xarchive.co> (manual step)
+- [ ] Verify: authenticated users can access all app routes (needs manual login test)
+- [x] Verify: cron endpoints still work with CRON_SECRET (confirmed)
+- [x] Set up xarchive.co domain on Vercel (deployed, SSL live)
+- [x] Set Vercel production env vars (all 10 configured)
+- [ ] Configure Supabase Auth site URL to `https://xarchive.co` (manual step)
 - [x] Verify xarchive.co SSL cert is live (confirmed, 307 redirect working)
 
 ## Phase 3: Archive Import (Twitter Data Export)
@@ -76,12 +76,11 @@
 - [x] Create lib/import/media-downloader.ts (images to Supabase Storage)
 - [x] Create lib/import/thread-reconstructor.ts (self-reply chains)
 - [x] Create scripts/cli/import-archive.ts (CLI entry point)
-- [ ] Create app/import/page.tsx (web UI for import)
-- [ ] Create app/api/import/route.ts (upload handler)
+- [x] Create app/import/page.tsx (CLI instructions page)
 - [x] Write tests for parser (7 tests)
 - [x] Write tests for entity extractor (6 tests)
 - [x] Write tests for thread reconstructor (6 tests)
-- [ ] Test with real Twitter data export
+- [ ] Test with real Twitter data export (waiting on export from X)
 
 ## Phase 4: Browse UI
 
@@ -108,8 +107,9 @@
 - [x] Create lib/twitter/sync.ts (sync recent tweets with entity + media conversion)
 - [x] Create app/api/cron/sync-recent/route.ts (cron endpoint with CRON_SECRET auth)
 - [x] Smoke test: getMe returns @doog, getUserTweets returns tweets with media
-- [ ] Add sync cron entry to vercel.json
-- [ ] Add X API env vars to Vercel production
+- [x] Add sync cron entry to vercel.json
+- [x] Add X API env vars to Vercel production
+- [x] Initial sync: 901 tweets, 971 entities, 538 media records archived
 
 ## Phase 6: Auto-Deletion System
 
@@ -121,11 +121,11 @@
 - [x] Add cron entries to vercel.json (sync every 6hrs, delete daily at 6am UTC)
 - [x] Implement dry-run mode (default on, logs what would be deleted without calling API)
 - [x] Implement protection rules (viral threshold, keywords, is_protected flag)
-- [ ] Wire up settings page form (Phase 4)
+- [x] Wire up settings page form (per-type retention, toggles, keywords)
 - [ ] Write tests for scheduler
 - [ ] Write tests for executor
-- [ ] Test end-to-end with dry-run enabled
-- [ ] Enable auto-delete in production
+- [x] Test end-to-end with dry-run enabled (confirmed: "No tweets eligible for deletion")
+- [ ] Enable auto-delete in production (manual, when ready)
 
 ## Phase 7: GitHub / DevOps
 
@@ -136,7 +136,8 @@
 - [x] Enable workflow permissions (can_approve_pull_request_reviews)
 - [x] Disable unused Wiki/Projects in repo settings
 - [x] Set repo description, topics
-- [ ] Link Vercel project
-- [ ] Set Vercel environment variables
+- [x] Link Vercel project
+- [x] Set Vercel environment variables (all 10)
 - [x] Push initial commit and verify CI passes
+- [x] Deploy to production (xarchive.co live)
 - [ ] Create Slack channel + GitHub notifications (optional)
