@@ -47,6 +47,23 @@
 - [x] Create lib/db/entities.ts (URLs, hashtags, mentions)
 - [ ] Write tests for DB query functions
 
+## Phase 2b: Authentication (Supabase Auth)
+
+- [ ] Install @supabase/ssr
+- [ ] Create lib/db/supabase-browser.ts (client-side Supabase client with cookie-based sessions)
+- [ ] Create lib/db/supabase-server.ts (server-side Supabase client for Server Components)
+- [ ] Create middleware.ts (refresh session, redirect unauthenticated users to /login)
+- [ ] Create app/login/page.tsx (email/password form, polished UI with shadcn components)
+- [ ] Create app/login/actions.ts (server actions for sign-in)
+- [ ] Create app/api/auth/confirm/route.ts (email confirmation callback)
+- [ ] Add RLS SELECT policies for authenticated user (in addition to service_role)
+- [ ] Create your user account in Supabase Auth dashboard
+- [ ] Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to .env.local
+- [ ] Update app layout with sign-out button (visible when authenticated)
+- [ ] Verify: unauthenticated users are redirected to /login
+- [ ] Verify: authenticated users can access all app routes
+- [ ] Verify: cron endpoints still work with CRON_SECRET (bypass auth middleware)
+
 ## Phase 3: Archive Import (Twitter Data Export)
 
 - [ ] Create lib/import/parser.ts (parse tweets.js from zip)
