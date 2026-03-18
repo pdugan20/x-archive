@@ -70,7 +70,7 @@ supabase/
 - **Storage**: Supabase Storage `tweet-media` bucket for images and video thumbnails.
 - **X API**: OAuth 1.0a with HMAC-SHA1 signing. Sync fetches original tweets for retweets to get
   full text and correct media URLs. Rate limit tracking with auto-wait.
-- **Auth**: Supabase Auth with @supabase/ssr cookie-based sessions. Middleware redirects
+- **Auth**: Supabase Auth with `@supabase/ssr` cookie-based sessions. Middleware redirects
   unauthenticated users to /login. Cron endpoints use CRON_SECRET bearer auth.
 - **Cron**: Vercel cron jobs. Sync every 6hrs, deletion daily at 6am UTC.
 - **UI**: shadcn/ui components. Infinite scroll on archive and media pages.
