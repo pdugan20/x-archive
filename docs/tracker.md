@@ -58,13 +58,15 @@
 - [x] Create app/api/auth/confirm/route.ts (email confirmation callback)
 - [x] Create components/sign-out-button.tsx
 - [x] Add RLS SELECT policies for authenticated user (migration 004)
-- [ ] Create your user account in Supabase Auth dashboard
-- [ ] Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to .env.local
-- [ ] Verify: unauthenticated users are redirected to /login
-- [ ] Verify: authenticated users can access all app routes
-- [ ] Verify: cron endpoints still work with CRON_SECRET (bypass auth middleware)
-- [ ] Set up xarchive.co domain on Vercel
-- [ ] Configure Supabase Auth site URL to <https://xarchive.co>
+- [x] Create your user account in Supabase Auth dashboard
+- [x] Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to .env.local
+- [x] Verify: unauthenticated users are redirected to /login (confirmed locally + Vercel)
+- [ ] Verify: authenticated users can access all app routes (pending production login test)
+- [x] Verify: cron endpoints still work with CRON_SECRET (health endpoint confirmed)
+- [x] Set up xarchive.co domain on Vercel (deployed, SSL cert provisioning)
+- [x] Set Vercel production env vars (all 5 configured)
+- [ ] Configure Supabase Auth site URL to <https://xarchive.co> (manual step)
+- [ ] Verify xarchive.co SSL cert is live
 
 ## Phase 3: Archive Import (Twitter Data Export)
 
