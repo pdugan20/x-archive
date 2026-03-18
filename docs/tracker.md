@@ -112,13 +112,15 @@
 
 ## Phase 6: Auto-Deletion System
 
-- [ ] Create lib/deletion/scheduler.ts (find candidates, apply protection rules)
-- [ ] Create lib/deletion/executor.ts (delete via API, log results)
-- [ ] Create app/api/cron/delete-old-tweets/route.ts
-- [ ] Add deletion cron entry to vercel.json
-- [ ] Implement dry-run mode
-- [ ] Implement protection rules (viral threshold, keywords, pinned)
-- [ ] Wire up settings page form
+- [x] Migration: per-type retention (post, reply, retweet, quote_tweet) replacing single retention_days
+- [x] Regenerate TypeScript types
+- [x] Create lib/deletion/scheduler.ts (per-type retention, viral threshold, keyword protection)
+- [x] Create lib/deletion/executor.ts (deleteTweet vs undoRetweet, 404 handling, audit logging)
+- [x] Create app/api/cron/delete-old-tweets/route.ts (CRON_SECRET auth, dry-run support)
+- [x] Add cron entries to vercel.json (sync every 6hrs, delete daily at 6am UTC)
+- [x] Implement dry-run mode (default on, logs what would be deleted without calling API)
+- [x] Implement protection rules (viral threshold, keywords, is_protected flag)
+- [ ] Wire up settings page form (Phase 4)
 - [ ] Write tests for scheduler
 - [ ] Write tests for executor
 - [ ] Test end-to-end with dry-run enabled

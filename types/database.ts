@@ -7,8 +7,6 @@ export type Json =
   | Json[];
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: '14.4';
   };
@@ -64,7 +62,10 @@ export type Database = {
           last_deletion_run_at: string | null;
           last_sync_at: string | null;
           protected_keywords: string[] | null;
-          retention_days: number;
+          retention_days_post: number;
+          retention_days_quote_tweet: number;
+          retention_days_reply: number;
+          retention_days_retweet: number;
           updated_at: string;
           viral_threshold: number;
           x_user_id: string | null;
@@ -77,7 +78,10 @@ export type Database = {
           last_deletion_run_at?: string | null;
           last_sync_at?: string | null;
           protected_keywords?: string[] | null;
-          retention_days?: number;
+          retention_days_post?: number;
+          retention_days_quote_tweet?: number;
+          retention_days_reply?: number;
+          retention_days_retweet?: number;
           updated_at?: string;
           viral_threshold?: number;
           x_user_id?: string | null;
@@ -90,7 +94,10 @@ export type Database = {
           last_deletion_run_at?: string | null;
           last_sync_at?: string | null;
           protected_keywords?: string[] | null;
-          retention_days?: number;
+          retention_days_post?: number;
+          retention_days_quote_tweet?: number;
+          retention_days_reply?: number;
+          retention_days_retweet?: number;
           updated_at?: string;
           viral_threshold?: number;
           x_user_id?: string | null;
