@@ -45,7 +45,7 @@
 - [x] Create lib/db/deletion-log.ts
 - [x] Create lib/db/search.ts (full-text search)
 - [x] Create lib/db/entities.ts (URLs, hashtags, mentions)
-- [ ] Write tests for DB query functions
+- [x] Write tests for DB query functions (settings, search)
 
 ## Phase 2b: Authentication (Supabase Auth)
 
@@ -58,15 +58,15 @@
 - [x] Create app/api/auth/confirm/route.ts (email confirmation callback)
 - [x] Create components/sign-out-button.tsx
 - [x] Add RLS SELECT policies for authenticated user (migration 004)
-- [x] Create your user account in Supabase Auth dashboard
-- [x] Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to .env.local
-- [x] Verify: unauthenticated users are redirected to /login (confirmed locally + Vercel)
-- [ ] Verify: authenticated users can access all app routes (needs manual login test)
-- [x] Verify: cron endpoints still work with CRON_SECRET (confirmed)
+- [x] Create user account in Supabase Auth dashboard
+- [x] Add env vars to .env.local
+- [x] Verify: unauthenticated users are redirected to /login
+- [x] Verify: authenticated users can access all app routes
+- [x] Verify: cron endpoints still work with CRON_SECRET
 - [x] Set up xarchive.co domain on Vercel (deployed, SSL live)
 - [x] Set Vercel production env vars (all 10 configured)
-- [ ] Configure Supabase Auth site URL to `https://xarchive.co` (manual step)
-- [x] Verify xarchive.co SSL cert is live (confirmed, 307 redirect working)
+- [x] Configure Supabase Auth site URL to `https://xarchive.co`
+- [x] Verify xarchive.co SSL cert is live
 
 ## Phase 3: Archive Import (Twitter Data Export)
 
@@ -80,16 +80,16 @@
 - [x] Write tests for parser (7 tests)
 - [x] Write tests for entity extractor (6 tests)
 - [x] Write tests for thread reconstructor (6 tests)
-- [ ] Test with real Twitter data export (waiting on export from X)
+- [-] Test with real Twitter data export (not needed: API sync fetches full RT data)
 
 ## Phase 4: Browse UI
 
 - [x] Create sidebar/layout component (shadcn Sidebar with nav icons)
-- [x] Create TweetCard component (type badge, metrics, reply/thread indicators)
-- [x] Create app/archive/page.tsx (timeline with type tabs and pagination)
+- [x] Create TweetCard component (context line, natural images, metrics)
+- [x] Create app/archive/page.tsx (infinite scroll, type tabs)
 - [x] Create app/search/page.tsx (full-text search via Postgres FTS)
-- [x] Create app/media/page.tsx (image grid with lazy loading)
-- [x] Create app/links/page.tsx (extracted URLs, deduplicated, sorted by frequency)
+- [x] Create app/media/page.tsx (infinite scroll image grid)
+- [x] Create app/links/page.tsx (clean table, deduplicated, domain extraction)
 - [x] Create app/thread/[id]/page.tsx (threaded conversation view)
 - [x] Create app/tweet/[id]/page.tsx (detail with media, entities, thread link)
 - [x] Create app/stats/page.tsx (counts, type breakdown, top liked posts)
@@ -103,17 +103,17 @@
 - [x] Configure OAuth 1.0a credentials (consumer key + access token for @doog)
 - [x] Create lib/twitter/oauth.ts (OAuth 1.0a HMAC-SHA1 request signing)
 - [x] Create lib/twitter/rate-limiter.ts (track x-rate-limit headers, auto-wait)
-- [x] Create lib/twitter/api-client.ts (getMe, getUserTweets, deleteTweet, undoRetweet)
-- [x] Create lib/twitter/sync.ts (sync recent tweets with entity + media conversion)
+- [x] Create lib/twitter/api-client.ts (getMe, getUserTweets, getTweetById, deleteTweet, undoRetweet)
+- [x] Create lib/twitter/sync.ts (sync with RT enrichment: full text + correct media from originals)
 - [x] Create app/api/cron/sync-recent/route.ts (cron endpoint with CRON_SECRET auth)
 - [x] Smoke test: getMe returns @doog, getUserTweets returns tweets with media
 - [x] Add sync cron entry to vercel.json
 - [x] Add X API env vars to Vercel production
-- [x] Initial sync: 901 tweets, 971 entities, 538 media records archived
+- [x] Initial sync: 901 tweets archived
 
 ## Phase 6: Auto-Deletion System
 
-- [x] Migration: per-type retention (post, reply, retweet, quote_tweet) replacing single retention_days
+- [x] Migration: per-type retention (post, reply, retweet, quote_tweet)
 - [x] Regenerate TypeScript types
 - [x] Create lib/deletion/scheduler.ts (per-type retention, viral threshold, keyword protection)
 - [x] Create lib/deletion/executor.ts (deleteTweet vs undoRetweet, 404 handling, audit logging)
@@ -122,9 +122,9 @@
 - [x] Implement dry-run mode (default on, logs what would be deleted without calling API)
 - [x] Implement protection rules (viral threshold, keywords, is_protected flag)
 - [x] Wire up settings page form (per-type retention, toggles, keywords)
-- [ ] Write tests for scheduler
-- [ ] Write tests for executor
-- [x] Test end-to-end with dry-run enabled (confirmed: "No tweets eligible for deletion")
+- [x] Write tests for scheduler (7 tests)
+- [x] Write tests for executor (3 tests)
+- [x] Test end-to-end with dry-run enabled
 - [ ] Enable auto-delete in production (manual, when ready)
 
 ## Phase 7: GitHub / DevOps
@@ -140,4 +140,4 @@
 - [x] Set Vercel environment variables (all 10)
 - [x] Push initial commit and verify CI passes
 - [x] Deploy to production (xarchive.co live)
-- [ ] Create Slack channel + GitHub notifications (optional)
+- [-] Create Slack channel + GitHub notifications (optional, deferred)
