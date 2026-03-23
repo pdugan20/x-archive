@@ -28,7 +28,6 @@ export default async function ArchivePage({
   let query = supabase
     .from('tweets')
     .select('*')
-    .eq('is_deleted', false)
     .order('created_at', { ascending: false })
     .limit(PAGE_SIZE);
 
@@ -56,8 +55,7 @@ export default async function ArchivePage({
 
   const { count: totalCount } = await supabase
     .from('tweets')
-    .select('*', { count: 'exact', head: true })
-    .eq('is_deleted', false);
+    .select('*', { count: 'exact', head: true });
 
   const nextCursor =
     tweets && tweets.length === PAGE_SIZE

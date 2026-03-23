@@ -8,11 +8,9 @@ const PAGE_SIZE = 50;
 export async function getTweets({
   type,
   page = 0,
-  includeDeleted = false,
 }: {
   type?: TweetType;
   page?: number;
-  includeDeleted?: boolean;
 } = {}) {
   const supabase = getSupabaseAdmin();
   let query = supabase
@@ -23,10 +21,6 @@ export async function getTweets({
 
   if (type) {
     query = query.eq('tweet_type', type);
-  }
-
-  if (!includeDeleted) {
-    query = query.eq('is_deleted', false);
   }
 
   return query;
@@ -71,10 +65,7 @@ export async function updateTweet(
 
 export async function getTweetCount() {
   const supabase = getSupabaseAdmin();
-  return supabase
-    .from('tweets')
-    .select('*', { count: 'exact', head: true })
-    .eq('is_deleted', false);
+  return supabase.from('tweets').select('*', { count: 'exact', head: true });
 }
 
 export async function getRetentionCandidates(cutoffDate: string, limit = 50) {

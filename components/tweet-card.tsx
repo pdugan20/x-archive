@@ -85,7 +85,7 @@ export function TweetCard({ tweet, media }: { tweet: Tweet; media?: Media[] }) {
               )}
               {tweet.is_deleted && (
                 <Badge variant="destructive" className="text-[10px]">
-                  Deleted
+                  Deleted from X
                 </Badge>
               )}
               <span className="text-xs text-muted-foreground">{date}</span>

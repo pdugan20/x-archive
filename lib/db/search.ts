@@ -8,7 +8,6 @@ export async function searchTweets(query: string, page = 0) {
     .from('tweets')
     .select('*')
     .textSearch('fts', query)
-    .eq('is_deleted', false)
     .order('created_at', { ascending: false })
     .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
 }

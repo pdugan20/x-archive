@@ -9,33 +9,28 @@ export default async function StatsPage() {
   // Total tweets
   const { count: totalTweets } = await supabase
     .from('tweets')
-    .select('*', { count: 'exact', head: true })
-    .eq('is_deleted', false);
+    .select('*', { count: 'exact', head: true });
 
   // By type
   const { count: postCount } = await supabase
     .from('tweets')
     .select('*', { count: 'exact', head: true })
-    .eq('tweet_type', 'post')
-    .eq('is_deleted', false);
+    .eq('tweet_type', 'post');
 
   const { count: replyCount } = await supabase
     .from('tweets')
     .select('*', { count: 'exact', head: true })
-    .eq('tweet_type', 'reply')
-    .eq('is_deleted', false);
+    .eq('tweet_type', 'reply');
 
   const { count: retweetCount } = await supabase
     .from('tweets')
     .select('*', { count: 'exact', head: true })
-    .eq('tweet_type', 'retweet')
-    .eq('is_deleted', false);
+    .eq('tweet_type', 'retweet');
 
   const { count: quoteCount } = await supabase
     .from('tweets')
     .select('*', { count: 'exact', head: true })
-    .eq('tweet_type', 'quote_tweet')
-    .eq('is_deleted', false);
+    .eq('tweet_type', 'quote_tweet');
 
   // Deleted count
   const { count: deletedCount } = await supabase
@@ -58,7 +53,6 @@ export default async function StatsPage() {
   const { data: topTweets } = await supabase
     .from('tweets')
     .select('id, full_text, favorite_count, created_at')
-    .eq('is_deleted', false)
     .eq('tweet_type', 'post')
     .order('favorite_count', { ascending: false })
     .limit(5);

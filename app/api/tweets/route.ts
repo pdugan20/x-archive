@@ -13,7 +13,6 @@ export async function GET(request: Request) {
   let query = supabase
     .from('tweets')
     .select('*')
-    .eq('is_deleted', false)
     .order('created_at', { ascending: false })
     .limit(limit);
 
