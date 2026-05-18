@@ -16,10 +16,14 @@ interface DeletionResult {
  * Execute deletions for a list of candidate tweets.
  * Handles retweets (undoRetweet) vs regular tweets (deleteTweet).
  * Logs every attempt to the deletion_log table.
+ *
+ * `reason` is recorded on each deletion_log row — defaults to
+ * 'retention_expired' for the scheduled cron, 'manual_purge' for the CLI.
  */
 export async function executeDeletions(
   candidates: Tweet[],
-  dryRun: boolean
+  dryRun: boolean,
+  reason = 'retention_expired'
 ): Promise<DeletionResult> {
   const result: DeletionResult = { success: 0, failed: 0, skipped: 0 };
   const supabase = getSupabaseAdmin();
@@ -40,7 +44,7 @@ export async function executeDeletions(
         tweet_type: tweet.tweet_type,
         tweet_text: tweet.full_text.substring(0, 500),
         tweet_created_at: tweet.created_at,
-        deletion_reason: 'retention_expired',
+        deletion_reason: reason,
         dry_run: true,
         was_retweet: isRetweet,
       });
@@ -74,7 +78,7 @@ export async function executeDeletions(
         tweet_type: tweet.tweet_type,
         tweet_text: tweet.full_text.substring(0, 500),
         tweet_created_at: tweet.created_at,
-        deletion_reason: 'retention_expired',
+        deletion_reason: reason,
         api_response_code: responseCode,
         dry_run: false,
         was_retweet: isRetweet,
@@ -101,7 +105,7 @@ export async function executeDeletions(
         tweet_type: tweet.tweet_type,
         tweet_text: tweet.full_text.substring(0, 500),
         tweet_created_at: tweet.created_at,
-        deletion_reason: 'retention_expired',
+        deletion_reason: reason,
         api_response_code: is404 ? 404 : 500,
         api_error: message,
         dry_run: false,
