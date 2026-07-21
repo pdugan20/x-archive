@@ -55,7 +55,7 @@ const makeTweet = (
   is_protected: false,
   raw_json: null,
   import_source: 'api',
-  fts: null as unknown,
+  fts: null,
   ...overrides,
 });
 

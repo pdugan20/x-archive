@@ -33,7 +33,13 @@ export default async function LinksPage() {
   >();
 
   for (const entity of urls ?? []) {
-    const expandedUrl = entity.expanded_url ?? entity.value;
+    // The .not() filter above excludes null expanded_url, but guard anyway so
+    // a filter change can't feed an empty key into the map.
+    const expandedUrl = entity.expanded_url;
+    if (!expandedUrl) {
+      continue;
+    }
+
     const domain = getDomain(expandedUrl);
 
     if (!domain || EXCLUDED_DOMAINS.some((d) => domain.endsWith(d))) {

@@ -136,7 +136,7 @@ export async function parseTweetsFromZip(
   const tweetsFile =
     zip.file('data/tweets.js') ??
     zip.file('tweets.js') ??
-    (zip.file(/tweets\.js$/i)[0] as JSZip.JSZipObject | undefined) ??
+    zip.file(/tweets\.js$/i).at(0) ??
     undefined;
 
   if (!tweetsFile) {
