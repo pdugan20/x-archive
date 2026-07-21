@@ -19,7 +19,7 @@ import {
 } from '@/lib/import/media-downloader';
 import { parseTweetsFromZip } from '@/lib/import/parser';
 import { reconstructThreads } from '@/lib/import/thread-reconstructor';
-import type { TablesInsert } from '@/types/database';
+import type { TablesInsert, TablesUpdate } from '@/types/database';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -158,7 +158,7 @@ async function main() {
       thread_position: thread?.threadPosition ?? null,
       source: t.source,
       lang: t.lang,
-      raw_json: t.raw_json as import('@/types/database').Json,
+      raw_json: t.raw_json,
       import_source: 'export' as const,
     };
   });
@@ -219,13 +219,13 @@ async function main() {
     let uploaded = 0;
     for (const [tweetId, mediaMap] of mediaResults) {
       for (const [mediaId, paths] of mediaMap) {
-        const updates: Record<string, string> = {};
+        const updates: TablesUpdate<'tweet_media'> = {};
         if (paths.storagePath) {
-          updates['storage_path'] = paths.storagePath;
+          updates.storage_path = paths.storagePath;
           uploaded++;
         }
         if (paths.thumbnailPath) {
-          updates['thumbnail_storage_path'] = paths.thumbnailPath;
+          updates.thumbnail_storage_path = paths.thumbnailPath;
           uploaded++;
         }
         if (Object.keys(updates).length > 0) {
