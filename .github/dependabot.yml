@@ -26,15 +26,24 @@ updates:
       - dependency-name: '*'
         update-types: ['version-update:semver-major']
     groups:
-      dev-dependencies:
+      formatter:
+        patterns:
+          - 'prettier'
+          - 'prettier-plugin-*'
         dependency-type: 'development'
         update-types:
           - 'minor'
           - 'patch'
-      production-dependencies:
+      development-patches:
+        dependency-type: 'development'
+        exclude-patterns:
+          - 'prettier'
+          - 'prettier-plugin-*'
+        update-types:
+          - 'patch'
+      production-patches:
         dependency-type: 'production'
         update-types:
-          - 'minor'
           - 'patch'
 
   - package-ecosystem: 'github-actions'
