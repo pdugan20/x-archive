@@ -62,7 +62,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-security": "^4.0.0",
     "husky": "^9.1.7",
-    "jsdom": "^29.0.2",
+    "jsdom": "^29.1.1",
     "lint-staged": "^16.4.0",
     "markdownlint-cli": "^0.48.0",
     "postcss": "^8.5.10",
