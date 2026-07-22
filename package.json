@@ -13,6 +13,7 @@
     "lint:md": "markdownlint \"**/*.md\" --ignore node_modules --ignore .next",
     "lint:md:fix": "markdownlint \"**/*.md\" --ignore node_modules --ignore .next --fix",
     "lint:claude": "claudelint check-all",
+    "test:automation-policy": "vitest run tests/automation-policy.test.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "type-check": "tsc --noEmit",
@@ -65,15 +66,16 @@
     "lint-staged": "^16.4.0",
     "markdownlint-cli": "^0.48.0",
     "postcss": "^8.5.10",
-    "prettier": "^3.8.3",
-    "prettier-plugin-organize-imports": "^4.3.0",
-    "prettier-plugin-tailwindcss": "^0.7.2",
+    "prettier": "3.8.3",
+    "prettier-plugin-organize-imports": "4.3.0",
+    "prettier-plugin-tailwindcss": "0.7.2",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
     "typescript": "^5",
     "typescript-eslint": "^8.58.2",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.1.4"
+    "vitest": "^4.1.4",
+    "yaml": "2.9.0"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
